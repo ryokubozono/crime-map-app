@@ -1,0 +1,8 @@
+venv/
+.python-version
+**/__pycache__/
+**/data
+**/node_modules
+**/dist
+.DS_store
+**/*.db

@@ -1,0 +1,10 @@
+pandas
+sqlalchemy
+fastapi
+typing
+pydantic
+uvicorn
+Gunicorn
+uvloop
+aiofiles
+httptools
