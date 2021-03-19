@@ -6,3 +6,5 @@ venv/
 **/dist
 .DS_store
 **/*.db
+.env.local
+.env.*.local

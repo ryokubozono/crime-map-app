@@ -8,13 +8,13 @@ cur = conn.cursor()
 
 # pandasでカレントディレクトリにあるcsvファイルを読み込む
 # csvには、1列目にyear, 2列目にmonth, 3列目にdayが入っているとする。
-df_0 = pd.read_csv("sql_app/data/2019_0.csv", encoding='cp932')
-df_1 = pd.read_csv("sql_app/data/2019_1.csv", encoding='cp932')
-df_2 = pd.read_csv("sql_app/data/2019_2.csv", encoding='cp932')
-df_3 = pd.read_csv("sql_app/data/2019_3.csv", encoding='cp932')
-df_4 = pd.read_csv("sql_app/data/2019_4.csv", encoding='cp932')
-df_5 = pd.read_csv("sql_app/data/2019_5.csv", encoding='cp932')
-df_6 = pd.read_csv("sql_app/data/2019_6.csv", encoding='cp932')
+df_0 = pd.read_csv("backend/data/2019_0.csv", encoding='cp932')
+df_1 = pd.read_csv("backend/data/2019_1.csv", encoding='cp932')
+df_2 = pd.read_csv("backend/data/2019_2.csv", encoding='cp932')
+df_3 = pd.read_csv("backend/data/2019_3.csv", encoding='cp932')
+df_4 = pd.read_csv("backend/data/2019_4.csv", encoding='cp932')
+df_5 = pd.read_csv("backend/data/2019_5.csv", encoding='cp932')
+df_6 = pd.read_csv("backend/data/2019_6.csv", encoding='cp932')
 
 # カラム名（列ラベル）を作成。csv file内にcolumn名がある場合は、下記は不要
 # pandasが自動で1行目をカラム名として認識してくれる。

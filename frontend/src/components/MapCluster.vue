@@ -77,13 +77,14 @@
           updateWhenIdle: false, 
           keepBuffer: 10
         },
+        fastApiUrl: "",
       }
     },
     methods: {
       click: (e) => console.log("clusterclick", e),
       ready: (e) => console.log('ready', e),
       async getCrimes() {
-          await axios.get(`http://127.0.0.1:8000/api/crimes/${this.crime_type}?skip=0&limit=100000&lat=${this.currentCenter.lat}&lng=${this.currentCenter.lng}`).then(response => response.data.forEach((row, i) => {
+          await axios.get(`${this.fastApiUrl}/api/crimes/${this.crime_type}?skip=0&limit=100000&lat=${this.currentCenter.lat}&lng=${this.currentCenter.lng}`).then(response => response.data.forEach((row, i) => {
               this.locations.push({
                 id: i+1,
                 latlng: latLng(row.fy, row.fx),
@@ -108,6 +109,7 @@
       },
     },
     mounted() {
+      this.fastApiUrl = process.env.VUE_APP_FAST_API_URL
       Promise.all(this.getCrimes())
       setTimeout(() => {
         console.log('done')

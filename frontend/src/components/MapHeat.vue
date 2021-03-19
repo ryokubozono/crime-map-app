@@ -76,6 +76,7 @@ export default {
           updateWhenIdle: false, 
           keepBuffer: 10
         },
+        fastApiUrl: "",
     }
   },
   methods: {
@@ -85,7 +86,7 @@ export default {
     //     }));
     // },
     async get_crime_by_type() {
-        await axios.get(`http://127.0.0.1:8000/api/crimes/${this.crime_type}?skip=0&limit=10000&lat=${this.currentCenter.lat}&lng=${this.currentCenter.lng}`).then(response => response.data.forEach(row => {
+        await axios.get(`${this.fastApiUrl}/api/crimes/${this.crime_type}?skip=0&limit=10000&lat=${this.currentCenter.lat}&lng=${this.currentCenter.lng}`).then(response => response.data.forEach(row => {
             this.latLngs.push([row.fy, row.fx, 1]);
             this.showHeat = true;
         }));
@@ -107,6 +108,7 @@ export default {
 
   },
   mounted() {
+    this.fastApiUrl = process.env.VUE_APP_FAST_API_URL
     Promise.all(this.get_crime_by_type())
     // setTimeout(() => {
     //   this.loading = false;
