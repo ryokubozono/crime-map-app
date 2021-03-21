@@ -7,6 +7,7 @@ import SimpleMap from '@/views/SimpleMap'
 import PinMap from '@/views/PinMap'
 import HeatMap from '@/views/HeatMap'
 import ClusterMap from '@/views/ClusterMap'
+import ChangeMap from '@/views/ChangeMap'
 import User from '@/views/User.vue'
 
 Vue.use(VueRouter);
@@ -49,6 +50,11 @@ const routes = [
     path: '/cluster_map/:id',
     name: 'cluster_map_by_crime_type',
     component: ClusterMap
+  },
+  {
+    path: '/change_map/:id',
+    name: 'change_map_by_crime_type',
+    component: ChangeMap
   },
   {
     path: '/user',

@@ -21,7 +21,7 @@ def read_crimes(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
     return crimes
 
 @router.get("/{crime_type}", response_model=List[schemas.Crime])
-def get_crimes_by_type(crime_type: int, skip: int = 0, limit: int = 100, lat: float = 35.68, lng: float = 139.78, db: Session = Depends(get_db)):
-    crimes = crud.get_crimes_by_type(db, skip=skip, limit=limit, crime_type=crime_type, lat=lat, lng=lng)
+def get_crimes_by_type(crime_type: int, skip: int = 0, limit: int = 100, lat: float = 35.68, lng: float = 139.78, zoom: int = 9, db: Session = Depends(get_db)):
+    crimes = crud.get_crimes_by_type(db, skip=skip, limit=limit, crime_type=crime_type, lat=lat, lng=lng, zoom=zoom)
 
     return crimes

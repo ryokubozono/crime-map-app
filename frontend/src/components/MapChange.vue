@@ -13,13 +13,23 @@
             :options="tileOptions"
         />
         <LeafletHeatmap 
-            v-if="showHeat"
+            v-if="showHeat && currentZoom <= 10"
             :lat-lng="latLngs" 
             :max="maxValue" 
             :radius="10" 
             :min-opacity="0.75" 
             :blur="15"
         />
+        <Vue2LeafletMarkercluster 
+            v-if="currentZoom > 10"
+            :options="clusterOptions" 
+            @clusterclick="click()" 
+            @ready="ready"
+        >
+            <l-marker v-for="l in locations" :key="l.id" :lat-lng="l.latlng" :icon="icon">
+                <l-popup :content="l.text"></l-popup>
+            </l-marker>
+        </Vue2LeafletMarkercluster>
     </l-map>
     <button v-on:click="go(0)">オートバイ盗</button>
     <button v-on:click="go(1)">ひったくり</button>
@@ -34,19 +44,35 @@
 
 <script>
 
-import { LMap, LTileLayer } from "vue2-leaflet";
+import { LMap, LTileLayer, LMarker, LPopup } from "vue2-leaflet";
+import { latLng, Icon, icon } from 'leaflet'
 import LeafletHeatmap from '@/components/LeafletHeatmap'
+import Vue2LeafletMarkercluster from '@/components/Vue2LeafletMarkercluster'
+import iconUrl from 'leaflet/dist/images/marker-icon.png'
+import shadowUrl from 'leaflet/dist/images/marker-shadow.png'
 import axios from "axios";
-import { latLng } from "leaflet";
 
 export default {
   components: {
     LMap,
     LTileLayer, 
-    LeafletHeatmap
+    LeafletHeatmap,
+    LMarker,
+    LPopup,
+    Vue2LeafletMarkercluster
   },
   data() {
+    let locations = []
+    let customicon = icon(Object.assign({},
+    Icon.Default.prototype.options,
+    {iconUrl, shadowUrl}
+    ))
+    console.log(locations)
+
     return {
+        locations,
+        icon: customicon,
+        clusterOptions: {},
         crimes: "",
         zoom: Number(this.$route.query.zoom),
         center: latLng(this.$route.query.lat, this.$route.query.lng),
@@ -78,16 +104,24 @@ export default {
     }
   },
   methods: {
-    // getCrimes() {
-    //     axios.get("http://127.0.0.1:8000/api/crimes/?skip=0&limit=2000").then(response => response.data.forEach(row => {
-    //         this.latLngs.push([row.fy, row.fx, 0.1])
-    //     }));
-    // },
+    click: (e) => console.log("clusterclick", e),
+    ready: (e) => console.log('ready', e),
     async get_crime_by_type() {
-        await axios.get(`${this.fastApiUrl}/api/crimes/${this.crime_type}?skip=0&limit=100000&lat=${this.currentCenter.lat}&lng=${this.currentCenter.lng}&zoom=${this.currentZoom}`).then(response => response.data.forEach(row => {
-            this.latLngs.push([row.fy, row.fx, 1]);
-            this.showHeat = true;
-        }));
+        if (Number(this.currentZoom) <= 10){
+            await axios.get(`${this.fastApiUrl}/api/crimes/${this.crime_type}?skip=0&limit=100000&lat=${this.currentCenter.lat}&lng=${this.currentCenter.lng}&zoom=${this.currentZoom}`).then(response => response.data.forEach(row => {
+                this.latLngs.push([row.fy, row.fx, 1]);
+                this.showHeat = true;
+            }));
+        } else {
+            await axios.get(`${this.fastApiUrl}/api/crimes/${this.crime_type}?skip=0&limit=100000&lat=${this.currentCenter.lat}&lng=${this.currentCenter.lng}&zoom=${this.currentZoom}`).then(response => response.data.forEach((row, i) => {
+                this.locations.push({
+                    id: i+1,
+                    latlng: latLng(row.fy, row.fx),
+                    text: row.location,
+                })
+            }));
+            console.log(this.locations)
+        }
     },
     // @update:zoom="zoomUpdate"がcenterも更新してしまうので削除した
     zoomUpdate(zoom) {
@@ -99,7 +133,7 @@ export default {
     },
     go: function(id) {
       // <router-link>では同じコンポーネントの再描画ができなかったから、URLの書き換え+リロードで実装した
-      this.$router.replace({ path: `/heat_map/${id}`, query: { lat: this.currentCenter.lat, lng: this.currentCenter.lng, zoom: this.currentZoom }}).then(() => {
+      this.$router.replace({ path: `/change_map/${id}`, query: { lat: this.currentCenter.lat, lng: this.currentCenter.lng, zoom: this.currentZoom }}).then(() => {
         this.$router.go(0)
       })
     },
@@ -108,9 +142,12 @@ export default {
   mounted() {
     this.fastApiUrl = process.env.VUE_APP_FAST_API_URL
     Promise.all(this.get_crime_by_type())
-    // setTimeout(() => {
-    //   this.loading = false;
-    // }, 2000);
+    setTimeout(() => {
+        console.log('done')
+        this.$nextTick(() =>{
+            this.clusterOptions = { disableClusteringAtZoom: 11 }
+        });
+    }, 1000);
   },
   computed: {
   },
@@ -122,3 +159,13 @@ export default {
 }
 
 </script>
+
+<style>
+  @import "~leaflet/dist/leaflet.css";
+  @import "~leaflet.markercluster/dist/MarkerCluster.css";
+  @import "~leaflet.markercluster/dist/MarkerCluster.Default.css";
+  html, body {
+    height: 100%;
+    margin: 0;
+  }
+</style>

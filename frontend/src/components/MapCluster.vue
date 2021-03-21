@@ -70,7 +70,7 @@
             '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
         crime_type: this.$route.params['id'],
         tileOptions: {
-          maxZoom: 13, 
+          maxZoom: 14, 
           minZoom: 9,
           minNativeZoom: 1,
           zoom:10, 
@@ -85,7 +85,7 @@
       click: (e) => console.log("clusterclick", e),
       ready: (e) => console.log('ready', e),
       async getCrimes() {
-          await axios.get(`${this.fastApiUrl}/api/crimes/${this.crime_type}?skip=0&limit=100000&lat=${this.currentCenter.lat}&lng=${this.currentCenter.lng}`).then(response => response.data.forEach((row, i) => {
+          await axios.get(`${this.fastApiUrl}/api/crimes/${this.crime_type}?skip=0&limit=100000&lat=${this.currentCenter.lat}&lng=${this.currentCenter.lng}&zoom=${this.currentZoom}`).then(response => response.data.forEach((row, i) => {
               this.locations.push({
                 id: i+1,
                 latlng: latLng(row.fy, row.fx),
