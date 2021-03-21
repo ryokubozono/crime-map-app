@@ -1,8 +1,8 @@
 <template>
   <div class="cluster_map">
-    <h1>This is an cluster_map page</h1>
     <!--マップコンポーネント表示-->
     <MapCluster></MapCluster>
+    <h1>This is an cluster_map page</h1>
   </div>
 </template>
 

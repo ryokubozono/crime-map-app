@@ -1,19 +1,9 @@
 <template>
   <div>
-    <button v-on:click="go(0)">オートバイ盗</button>
-    <button v-on:click="go(1)">ひったくり</button>
-    <button v-on:click="go(2)">自転車盗</button>
-    <button v-on:click="go(3)">自動車盗</button>
-    <button v-on:click="go(4)">自動販売機狙い</button>
-    <button v-on:click="go(5)">車上狙い</button>
-    <button v-on:click="go(6)">部品狙い</button>
-
-
-    <p>Center is at {{ currentCenter }} and the zoom is: {{ currentZoom }}</p>
     <l-map 
         :zoom="zoom" 
         :center="center"
-        style="height: 700px; width: 700px"    
+        style="height: 700px; width: 1000px"    
         @update:center="centerUpdate"
         @update:zoom="zoomUpdate"
     >
@@ -31,6 +21,14 @@
             :blur="15"
         />
     </l-map>
+    <button v-on:click="go(0)">オートバイ盗</button>
+    <button v-on:click="go(1)">ひったくり</button>
+    <button v-on:click="go(2)">自転車盗</button>
+    <button v-on:click="go(3)">自動車盗</button>
+    <button v-on:click="go(4)">自動販売機狙い</button>
+    <button v-on:click="go(5)">車上狙い</button>
+    <button v-on:click="go(6)">部品狙い</button>
+    <p>Center is at {{ currentCenter }} and the zoom is: {{ currentZoom }}</p>
   </div>
 </template>
 

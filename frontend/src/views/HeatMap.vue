@@ -1,9 +1,7 @@
 <template>
   <div class="heat_map">
-    <h1>This is an heat_map page</h1>
-
-    <!--マップコンポーネント表示-->
     <MapHeat />
+    <h1>This is an heat_map page</h1>
   </div>
 </template>
 
