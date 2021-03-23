@@ -13,7 +13,7 @@
             :options="tileOptions"
         />
         <LeafletHeatmap 
-            v-if="showHeat && currentZoom <= 10"
+            v-if="showHeat && currentZoom <= changeZoom"
             :lat-lng="latLngs" 
             :max="maxValue" 
             :radius="10" 
@@ -21,7 +21,7 @@
             :blur="15"
         />
         <Vue2LeafletMarkercluster 
-            v-if="currentZoom > 10"
+            v-if="currentZoom > changeZoom"
             :options="clusterOptions" 
             @clusterclick="click()" 
             @ready="ready"
@@ -70,6 +70,7 @@ export default {
     console.log(locations)
 
     return {
+        changeZoom: 12,
         locations,
         icon: customicon,
         clusterOptions: {},
@@ -92,8 +93,8 @@ export default {
         crime_type: this.$route.params['id'],
         // gradients: {0.4: 'blue', 0.65: 'lime', 1: 'red'}
         tileOptions: {
-          maxZoom: 14, 
-          minZoom: 9,
+          maxZoom: 15, 
+          minZoom: 5,
           minNativeZoom: 1,
           zoom:10, 
           detectRetina: true,
@@ -107,13 +108,13 @@ export default {
     click: (e) => console.log("clusterclick", e),
     ready: (e) => console.log('ready', e),
     async get_crime_by_type() {
-        if (Number(this.currentZoom) <= 10){
-            await axios.get(`${this.fastApiUrl}/api/crimes/${this.crime_type}?skip=0&limit=100000&lat=${this.currentCenter.lat}&lng=${this.currentCenter.lng}&zoom=${this.currentZoom}`).then(response => response.data.forEach(row => {
+        if (Number(this.currentZoom) <= this.changeZoom){
+            await axios.get(`${this.fastApiUrl}/api/crimes/${this.crime_type}?skip=0&limit=200000&lat=${this.currentCenter.lat}&lng=${this.currentCenter.lng}&zoom=${this.currentZoom}`).then(response => response.data.forEach(row => {
                 this.latLngs.push([row.fy, row.fx, 1]);
                 this.showHeat = true;
             }));
         } else {
-            await axios.get(`${this.fastApiUrl}/api/crimes/${this.crime_type}?skip=0&limit=100000&lat=${this.currentCenter.lat}&lng=${this.currentCenter.lng}&zoom=${this.currentZoom}`).then(response => response.data.forEach((row, i) => {
+            await axios.get(`${this.fastApiUrl}/api/crimes/${this.crime_type}?skip=0&limit=200000&lat=${this.currentCenter.lat}&lng=${this.currentCenter.lng}&zoom=${this.currentZoom}`).then(response => response.data.forEach((row, i) => {
                 this.locations.push({
                     id: i+1,
                     latlng: latLng(row.fy, row.fx),

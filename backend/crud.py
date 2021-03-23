@@ -16,13 +16,30 @@ def get_crimes(db: Session, skip: int = 0, limit: int = 100):
     return db.query(models.Crime).offset(skip).limit(limit).all()
 
 def get_crimes_by_type(db: Session, skip: int =0, limit: int = 100, crime_type: int = 0, lat: float = 35.68 , lng: float = 139.78, zoom: int = 9):
-    return db.query(models.Crime).\
-        filter(models.Crime.crime_type==crime_type).\
-        filter(models.Crime.fy>lat-(8.6-1.36*zoom+0.0548*zoom**2)).\
-        filter(models.Crime.fy<lat+(8.6-1.36*zoom+0.0548*zoom**2)).\
-        filter(models.Crime.fx>lng-(20.2-3.36*zoom+0.141*zoom**2)).\
-        filter(models.Crime.fx<lng+(20.2-3.36*zoom+0.141*zoom**2)).\
-        offset(skip).limit(limit).all()
+    diff_x = 58.9 - 14.3*zoom + 1.17*zoom**2 - 0.032*zoom**3
+    diff_y = 32.6 - 7.88*zoom + 0.642*zoom**2 - 0.0175*zoom**3
+    if zoom <= 9:
+        return db.query(models.Crime).\
+            filter(models.Crime.id % 100 == 0).\
+            filter(models.Crime.crime_type==crime_type).\
+            offset(skip).limit(limit).all()
+    elif zoom <= 12 and zoom > 9:
+        return db.query(models.Crime).\
+            filter(models.Crime.id % 10 == 0).\
+            filter(models.Crime.crime_type==crime_type).\
+            filter(models.Crime.fy>lat-diff_y).\
+            filter(models.Crime.fy<lat+diff_y).\
+            filter(models.Crime.fx>lng-diff_x).\
+            filter(models.Crime.fx<lng+diff_x).\
+            offset(skip).limit(limit).all()
+    else:
+        return db.query(models.Crime).\
+            filter(models.Crime.crime_type==crime_type).\
+            filter(models.Crime.fy>lat-diff_y).\
+            filter(models.Crime.fy<lat+diff_y).\
+            filter(models.Crime.fx>lng-diff_x).\
+            filter(models.Crime.fx<lng+diff_x).\
+            offset(skip).limit(limit).all() 
 
 def get_user(db: Session, user_id: int):
     return db.query(models.User).filter(models.User.id == user_id).first()
