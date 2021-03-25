@@ -35,7 +35,7 @@ def get_crimes_by_type(db: Session, skip: int =0, limit: int = 100, crime_type: 
                 offset(skip).limit(limit).all()
         else:
             return db.query(models.Crime).\
-                filter(models.Crime.id % 2 == 0).\
+                filter(models.Crime.id % 10 == 0).\
                 filter(models.Crime.crime_type==crime_type).\
                 filter(models.Crime.fy>lat-diff_y).\
                 filter(models.Crime.fy<lat+diff_y).\
