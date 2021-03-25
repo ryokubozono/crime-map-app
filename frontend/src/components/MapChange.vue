@@ -1,5 +1,6 @@
 <template>
   <div>
+    <div>
     <l-map 
         :zoom="zoom" 
         :center="center"
@@ -19,6 +20,7 @@
             :radius="10" 
             :min-opacity="0.75" 
             :blur="15"
+            @ready="ready"
         />
         <Vue2LeafletMarkercluster 
             v-if="currentZoom > changeZoom"
@@ -31,6 +33,14 @@
             </l-marker>
         </Vue2LeafletMarkercluster>
     </l-map>
+    </div>
+    <v-overlay
+      :z-index=0
+      :value="loading"
+    >
+      <vue-loading v-if="loading" type="spin" color="#333" :size="{ width: '50px', height: '50px' }"></vue-loading>
+    </v-overlay>
+
     <button v-on:click="go(0)">オートバイ盗</button>
     <button v-on:click="go(1)">ひったくり</button>
     <button v-on:click="go(2)">自転車盗</button>
@@ -40,6 +50,7 @@
     <button v-on:click="go(6)">部品狙い</button>
     <p>Center is at {{ currentCenter }} and the zoom is: {{ currentZoom }}</p>
   </div>
+  
 </template>
 
 <script>
@@ -51,6 +62,7 @@ import Vue2LeafletMarkercluster from '@/components/Vue2LeafletMarkercluster'
 import iconUrl from 'leaflet/dist/images/marker-icon.png'
 import shadowUrl from 'leaflet/dist/images/marker-shadow.png'
 import axios from "axios";
+import { VueLoading } from 'vue-loading-template'
 
 export default {
   components: {
@@ -59,7 +71,8 @@ export default {
     LeafletHeatmap,
     LMarker,
     LPopup,
-    Vue2LeafletMarkercluster
+    Vue2LeafletMarkercluster,
+    VueLoading
   },
   data() {
     let locations = []
@@ -80,7 +93,7 @@ export default {
         currentCenter: latLng(this.$route.query.lat, this.$route.query.lng),
         currentZoom: this.$route.query.zoom,
         maxValue: 1,
-        url: 'https://tile.mierune.co.jp/mierune/{z}/{x}/{y}.png',
+        url: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
         attribution:
             '&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors',
 
@@ -88,7 +101,6 @@ export default {
         customText: "Foobar",
         iconSize: 64,
         latLngs: [],
-        loading: true,
         showHeat: false,
         crime_type: this.$route.params['id'],
         // gradients: {0.4: 'blue', 0.65: 'lime', 1: 'red'}
@@ -102,17 +114,21 @@ export default {
           keepBuffer: 10
         },
         fastApiUrl: "",
+        loading: true,
     }
   },
   methods: {
     click: (e) => console.log("clusterclick", e),
-    ready: (e) => console.log('ready', e),
+    ready: function(e) {
+      console.log('ready', e)
+    },
     async get_crime_by_type() {
         if (Number(this.currentZoom) <= this.changeZoom){
             await axios.get(`${this.fastApiUrl}/api/crimes/${this.crime_type}?skip=0&limit=200000&lat=${this.currentCenter.lat}&lng=${this.currentCenter.lng}&zoom=${this.currentZoom}`).then(response => response.data.forEach(row => {
                 this.latLngs.push([row.fy, row.fx, 1]);
                 this.showHeat = true;
             }));
+            this.loading = false;
         } else {
             await axios.get(`${this.fastApiUrl}/api/crimes/${this.crime_type}?skip=0&limit=200000&lat=${this.currentCenter.lat}&lng=${this.currentCenter.lng}&zoom=${this.currentZoom}`).then(response => response.data.forEach((row, i) => {
                 this.locations.push({
@@ -121,7 +137,8 @@ export default {
                     text: row.location,
                 })
             }));
-            console.log(this.locations)
+            console.log(this.locations);
+            this.loading = false;
         }
     },
     // @update:zoom="zoomUpdate"がcenterも更新してしまうので削除した
