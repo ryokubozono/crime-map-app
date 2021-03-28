@@ -105,7 +105,7 @@ export default {
         crime_type: this.$route.params['id'],
         // gradients: {0.4: 'blue', 0.65: 'lime', 1: 'red'}
         tileOptions: {
-          maxZoom: 14, 
+          maxZoom: 15, 
           minZoom: 5,
           minNativeZoom: 1,
           zoom:10, 
