@@ -1,5 +1,5 @@
 from sqlalchemy.orm import Session
-
+import math
 from . import models, schemas
 
 def get_events(db: Session, skip: int = 0, limit: int = 100):
@@ -16,8 +16,11 @@ def get_crimes(db: Session, skip: int = 0, limit: int = 100):
     return db.query(models.Crime).offset(skip).limit(limit).all()
 
 def get_crimes_by_type(db: Session, skip: int =0, limit: int = 100, crime_type: int = 0, lat: float = 35.68 , lng: float = 139.78, zoom: int = 9):
-    diff_x = 58.9 - 14.3*zoom + 1.17*zoom**2 - 0.032*zoom**3
-    diff_y = 32.6 - 7.88*zoom + 0.642*zoom**2 - 0.0175*zoom**3
+    # diff_x = 90 - 26.5*zoom + 2.96*zoom**2 - 0.148*zoom**3 + 0.003*zoom**4
+    # diff_y = 50 - 14.7*zoom + 1.64*zoom**2 - 0.082*zoom**3 + 0.002*zoom**4
+    diff_x = 856 * math.exp(-0.7 * zoom)
+    diff_y = 445 * math.exp(-0.7 * zoom)
+
     if crime_type == 2:
         if zoom <= 9:
             return db.query(models.Crime).\
