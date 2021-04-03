@@ -42,12 +42,20 @@
             > 
             </l-marker>
           </Vue2LeafletMarkercluster>
+          <l-circle-marker
+            v-if="showText"
+            :lat-lng="circleCenter"
+            :radius="circleRadius"
+            :color="circleColor"
+            :fillColor="circleColor"
+          />
         </l-map>
       </div>
       <div
         :class="$style.textDiv"
         v-if="showText"
       >
+        <v-btn v-on:click="closeText">close</v-btn>
         <v-simple-table>
           <template v-slot:default>
             <tbody>
@@ -85,13 +93,13 @@
     <div
       :class="$style.btnDiv"
     >
-      <v-btn v-on:click="go(0)">オートバイ盗</v-btn>
-      <v-btn v-on:click="go(1)">ひったくり</v-btn>
-      <v-btn v-on:click="go(2)">自転車盗</v-btn>
-      <v-btn v-on:click="go(3)">自動車盗</v-btn>
-      <v-btn v-on:click="go(4)">自動販売機狙い</v-btn>
-      <v-btn v-on:click="go(5)">車上狙い</v-btn>
-      <v-btn v-on:click="go(6)">部品狙い</v-btn>
+      <v-btn v-on:click="go(0)" :disabled="crime_type == 0" :outlined="crime_type == 0">オートバイ盗</v-btn>
+      <v-btn v-on:click="go(1)" :disabled="crime_type == 1" :outlined="crime_type == 1">ひったくり</v-btn>
+      <v-btn v-on:click="go(2)" :disabled="crime_type == 2" :outlined="crime_type == 2">自転車盗</v-btn>
+      <v-btn v-on:click="go(3)" :disabled="crime_type == 3" :outlined="crime_type == 3">自動車盗</v-btn>
+      <v-btn v-on:click="go(4)" :disabled="crime_type == 4" :outlined="crime_type == 4">自動販売機狙い</v-btn>
+      <v-btn v-on:click="go(5)" :disabled="crime_type == 5" :outlined="crime_type == 5">車上狙い</v-btn>
+      <v-btn v-on:click="go(6)" :disabled="crime_type == 6" :outlined="crime_type == 6">部品狙い</v-btn>
     </div>
   </div>
   
@@ -99,7 +107,7 @@
 
 <script>
 
-import { LMap, LTileLayer, LMarker } from "vue2-leaflet";
+import { LMap, LTileLayer, LMarker, LCircleMarker } from "vue2-leaflet";
 import { latLng, Icon, icon } from 'leaflet'
 import LeafletHeatmap from '@/components/LeafletHeatmap'
 import Vue2LeafletMarkercluster from '@/components/Vue2LeafletMarkercluster'
@@ -116,6 +124,7 @@ export default {
     LMarker,
     Vue2LeafletMarkercluster,
     VueLoading, 
+    LCircleMarker,
   },
   data() {
     let locations = []
@@ -144,11 +153,14 @@ export default {
         customText: "Foobar",
         iconSize: 64,
         latLngs: [],
+        circleCenter: "",
+        circleRadius: 6,
+        circleColor: "red",
         showHeat: false,
         crime_type: this.$route.params['id'],
         // gradients: {0.4: 'blue', 0.65: 'lime', 1: 'red'}
         tileOptions: {
-          maxZoom: 16, 
+          maxZoom: 17, 
           minZoom: 5,
           minNativeZoom: 1,
           zoom:10, 
@@ -224,7 +236,9 @@ export default {
       this.hour = location.hour
       this.crime_id = location.crime_type
       this.object = location.object
+      this.circleCenter = location.latlng
       console.log(location)
+      console.log(this.circleCenter)
     },
     type2crime: function(type) {
       let str = ""
@@ -254,7 +268,10 @@ export default {
           console.log('no match type')
       }
       return str
-    }
+    },
+    closeText: function() {
+      this.showText = false
+    },
   },
   mounted() {
     this.fastApiUrl = process.env.VUE_APP_FAST_API_URL
