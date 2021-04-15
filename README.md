@@ -17,6 +17,10 @@ You need to put csv files in data directory.
         - 2019_0csv
         - 2019_1csv
         - etc.
+    - population_data
+        - ***.csv
+        - ***.csv
+        - etc.
 ```
 
 You need to insert all data by using backend/functions/crate_db.py.

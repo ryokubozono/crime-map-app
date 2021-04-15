@@ -65,6 +65,36 @@ class Crime(Base):
     job = Column(String)
     money = Column(String)
 
+class Place(Base):
+    __tablename__ = "places"
+
+    id = Column(Integer, primary_key=True, index=True)
+
+    KEY_CODE = Column(Integer)
+    HYOSYO = Column(Integer)
+    CITYNAME = Column(String)
+    PLACENAME = Column(String)
+    HTKSYORI = Column(Integer)
+    HTKSAKI = Column(Integer)
+    GASSAN = Column(Integer)
+    population = Column(Integer)
+    men = Column(Integer)
+    women = Column(Integer)
+    homes = Column(Integer)
+    LocName = Column(String)
+    fx = Column(Float)
+    fy = Column(Float)
+    iconf = Column(Integer)
+    ilvl = Column(Integer)
+    crime_0 = Column(Integer)
+    crime_1 = Column(Integer)
+    crime_2 = Column(Integer)
+    crime_3 = Column(Integer)
+    crime_4 = Column(Integer)
+    crime_5 = Column(Integer)
+    crime_6 = Column(Integer)
+
+
 class Item(Base):
     __tablename__ = "items"
 

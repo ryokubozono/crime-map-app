@@ -54,6 +54,7 @@ class Event(EventBase):
 class EventCreate(EventBase):
     id: int
 
+########## Crime
 class CrimeBase(BaseModel):
     pass
 
@@ -86,3 +87,37 @@ class Crime(CrimeBase):
     age: Optional[str] = None
     job: Optional[str] = None
     money: Optional[str] = None
+
+########## Place
+class PlaceBase(BaseModel):
+    pass
+
+class Place(PlaceBase):
+    id: int
+
+    class Config:
+        orm_mode = True
+    
+    KEY_CODE: Optional[int] = None
+    HYOSYO: Optional[int] = None
+    ITYNAME: Optional[str] = None
+    PLACENAME: Optional[str] = None
+    HTKSYORI: Optional[int] = None
+    HTKSAKI: Optional[int] = None
+    GASSAN: Optional[int] = None
+    population: Optional[int] = None
+    men: Optional[int] = None
+    women: Optional[int] = None
+    homes: Optional[int] = None
+    LocName: Optional[str] = None
+    fx: Optional[float] = None
+    fy: Optional[float] = None
+    iconf: Optional[int] = None
+    ilvl: Optional[int] = None
+    crime_0: Optional[int] = None
+    crime_1: Optional[int] = None
+    crime_2: Optional[int] = None
+    crime_3: Optional[int] = None
+    crime_4: Optional[int] = None
+    crime_5: Optional[int] = None
+    crime_6: Optional[int] = None

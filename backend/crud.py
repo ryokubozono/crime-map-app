@@ -12,6 +12,39 @@ def create_event(db: Session, event: schemas.EventCreate):
     db.refresh(db_event)
     return db_event
 
+def get_places(db: Session, skip: int = 0, limit: int = 100):
+    return db.query(models.Place).offset(skip).limit(limit).all()
+
+def get_places_with_filter(db: Session, skip: int =0, limit: int = 100, lat: float = 35.68 , lng: float = 139.78, zoom: int = 9):
+    diff_x = 856 * math.exp(-0.7 * zoom)
+    diff_y = 445 * math.exp(-0.7 * zoom)
+    if zoom <= 9:
+        return db.query(models.Place).\
+            filter(models.Place.HYOSYO == 1).\
+            filter(models.Place.fy>lat-diff_y).\
+            filter(models.Place.fy<lat+diff_y).\
+            filter(models.Place.fx>lng-diff_x).\
+            filter(models.Place.fx<lng+diff_x).\
+            offset(skip).limit(limit).all()    
+    elif zoom <= 12 and zoom > 9:
+        return db.query(models.Place).\
+            filter(models.Place.HYOSYO == 2).\
+            filter(models.Place.fy>lat-diff_y).\
+            filter(models.Place.fy<lat+diff_y).\
+            filter(models.Place.fx>lng-diff_x).\
+            filter(models.Place.fx<lng+diff_x).\
+            offset(skip).limit(limit).all()    
+    else:
+        return db.query(models.Place).\
+            filter(models.Place.HYOSYO == 3).\
+            filter(models.Place.fy>lat-diff_y).\
+            filter(models.Place.fy<lat+diff_y).\
+            filter(models.Place.fx>lng-diff_x).\
+            filter(models.Place.fx<lng+diff_x).\
+            offset(skip).limit(limit).all()    
+        pass
+
+
 def get_crimes(db: Session, skip: int = 0, limit: int = 100):
     return db.query(models.Crime).offset(skip).limit(limit).all()
 
