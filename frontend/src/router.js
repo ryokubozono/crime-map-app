@@ -9,6 +9,7 @@ import HeatMap from '@/views/HeatMap'
 import ClusterMap from '@/views/ClusterMap'
 import ChangeMap from '@/views/ChangeMap'
 import User from '@/views/User.vue'
+import PlaceMap from '@/views/PlaceMap.vue'
 
 Vue.use(VueRouter);
 
@@ -55,6 +56,11 @@ const routes = [
     path: '/change_map/:id',
     name: 'change_map_by_crime_type',
     component: ChangeMap
+  },
+  {
+    path: '/place_map/:id/:mode',
+    name: 'place_map_by_crime_type',
+    component: PlaceMap
   },
   {
     path: '/user',

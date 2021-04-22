@@ -26,7 +26,7 @@ def get_places_with_filter(db: Session, skip: int =0, limit: int = 100, lat: flo
             filter(models.Place.fx>lng-diff_x).\
             filter(models.Place.fx<lng+diff_x).\
             offset(skip).limit(limit).all()    
-    elif zoom <= 12 and zoom > 9:
+    elif zoom <= 11 and zoom > 9:
         return db.query(models.Place).\
             filter(models.Place.HYOSYO == 2).\
             filter(models.Place.fy>lat-diff_y).\
