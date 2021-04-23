@@ -10,6 +10,7 @@ import ClusterMap from '@/views/ClusterMap'
 import ChangeMap from '@/views/ChangeMap'
 import User from '@/views/User.vue'
 import PlaceMap from '@/views/PlaceMap.vue'
+import Dashboard from '@/views/Dashboard.vue'
 
 Vue.use(VueRouter);
 
@@ -66,6 +67,11 @@ const routes = [
     path: '/user',
     name: 'user',
     component: User
+  },
+  {
+    path: '/dashboard',
+    name: 'dashboard',
+    component: Dashboard
   },
 ]
 
