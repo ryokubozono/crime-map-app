@@ -11,6 +11,7 @@ import ChangeMap from '@/views/ChangeMap'
 import User from '@/views/User.vue'
 import PlaceMap from '@/views/PlaceMap.vue'
 import Dashboard from '@/views/Dashboard.vue'
+import PlaceList from '@/views/PlaceList.vue'
 
 Vue.use(VueRouter);
 
@@ -73,6 +74,11 @@ const routes = [
     name: 'dashboard',
     component: Dashboard
   },
+  {
+    path: '/places/:place_type',
+    name: 'places_by_type',
+    component: PlaceList,
+  }
 ]
 
 export default new VueRouter({routes, mode})

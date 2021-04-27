@@ -15,6 +15,29 @@ def create_event(db: Session, event: schemas.EventCreate):
 def get_places(db: Session, skip: int = 0, limit: int = 100):
     return db.query(models.Place).offset(skip).limit(limit).all()
 
+def get_places_city(db: Session, skip: int = 0, limit: int = 100, prefecture: str = '/'):
+    return db.query(models.Place).\
+        filter(models.Place.HYOSYO == 1).\
+        filter(models.Place.LocName.like('%' + prefecture + '%')).\
+        offset(skip).limit(limit).all()
+
+def get_places_town(db: Session, skip: int = 0, limit: int = 100, prefecture: str = '/'):
+    return db.query(models.Place).\
+        filter(models.Place.HYOSYO == 2).\
+        filter(models.Place.LocName.like('%' + prefecture + '%')).\
+        offset(skip).limit(limit).all()
+
+def get_places_street(db: Session, skip: int = 0, limit: int = 100, prefecture: str = '/'):
+    return db.query(models.Place).\
+        filter(models.Place.HYOSYO == 3).\
+        filter(models.Place.LocName.like('%' + prefecture + '%')).\
+        offset(skip).limit(limit).all()
+
+def get_places_(db: Session, skip: int = 0, limit: int = 100):
+    return db.query(models.Place).\
+        filter(models.Place.HYOSYO == 2).\
+        offset(skip).limit(limit).all()
+
 def get_places_with_filter(db: Session, skip: int =0, limit: int = 100, lat: float = 35.68 , lng: float = 139.78, zoom: int = 9):
     diff_x = 856 * math.exp(-0.7 * zoom)
     diff_y = 445 * math.exp(-0.7 * zoom)
