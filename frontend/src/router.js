@@ -12,6 +12,10 @@ import User from '@/views/User.vue'
 import PlaceMap from '@/views/PlaceMap.vue'
 import Dashboard from '@/views/Dashboard.vue'
 import PlaceList from '@/views/PlaceList.vue'
+import BlogNew from '@/views/BlogNew.vue'
+import BlogEdit from '@/views/BlogEdit.vue'
+import TagNew from '@/views/TagNew.vue'
+import TagEdit from '@/views/TagEdit.vue'
 
 Vue.use(VueRouter);
 
@@ -78,6 +82,26 @@ const routes = [
     path: '/places/:place_type',
     name: 'places_by_type',
     component: PlaceList,
+  },
+  {
+    path: '/blog_new',
+    name: 'blog_new',
+    component: BlogNew,
+  },
+  {
+    path: '/blog_edit/:blog_id',
+    name: 'blog_edit',
+    component: BlogEdit,
+  },
+  {
+    path: '/tag_new',
+    name: 'tag_new',
+    component: TagNew,
+  },
+  {
+    path: '/tag_edit/:tag_id',
+    name: 'tag_edit',
+    component: TagEdit,
   }
 ]
 

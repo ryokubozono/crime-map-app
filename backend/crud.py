@@ -1,6 +1,7 @@
 from sqlalchemy.orm import Session
 import math
 from . import models, schemas
+from typing import List
 
 def get_events(db: Session, skip: int = 0, limit: int = 100):
     return db.query(models.Event).offset(skip).limit(limit).all()
@@ -156,3 +157,51 @@ def create_user_item(db: Session, item: schemas.ItemCreate, user_id: int):
     db.commit()
     db.refresh(db_item)
     return db_item
+
+def create_blog(db: Session, blog: schemas.BlogCreate):
+    db_blog = models.Blog(
+        title=blog.title,
+        content=blog.content,
+        tags=get_tags_by_ids(db=db, tag_ids=blog.tags),
+        image_url=blog.image_url
+    )
+    db.add(db_blog)
+    db.commit()
+    db.refresh(db_blog)
+    return db_blog
+
+def get_blog_by_id(db: Session, blog_id: int):
+    return db.query(models.Blog).filter(models.Blog.id == blog_id).first()
+
+def update_blog(db: Session, blog_id: int, blog: schemas.BlogUpdate):
+    db_blog = get_blog_by_id(db=db, blog_id=blog_id)
+    db_blog.content = blog.content
+    db_blog.title = blog.title
+    db_blog.tags = get_tags_by_ids(db=db, tag_ids=blog.tags)
+    db_blog.image_url = blog.image_url
+    db.commit()
+
+    return db_blog
+
+def create_tag(db: Session, tag: schemas.TagCreate):
+    db_tag = models.Tag(**tag.dict())
+    db.add(db_tag)
+    db.commit()
+    db.refresh(db_tag)
+    return db_tag
+
+def get_tags(db: Session):
+    return db.query(models.Tag).all()
+
+def get_tag_by_id(db: Session, tag_id: int):
+    return db.query(models.Tag).filter(models.Tag.id == tag_id).first()
+
+def update_tag(db: Session, tag_id: int, tag: schemas.TagUpdate):
+    db_tag = get_tag_by_id(db=db, tag_id=tag_id)
+    db_tag.name = tag.name
+    db.commit()
+
+    return db_tag
+
+def get_tags_by_ids(db: Session, tag_ids: List[int]):
+    return db.query(models.Tag).filter(models.Tag.id.in_(tag_ids)).all()

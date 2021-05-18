@@ -1,8 +1,7 @@
-from sqlalchemy import Column, ForeignKey, func
+from sqlalchemy import Column, ForeignKey, func, Table
 from sqlalchemy.orm import relationship
 from sqlalchemy.types import Boolean, Date, DateTime, Float, Integer, Text, Time, Interval, String
 from .database import Base
-
 
 class User(Base):
     __tablename__ = "users"
@@ -13,6 +12,51 @@ class User(Base):
     is_active = Column(Boolean, default=True)
 
     items = relationship("Item", back_populates="owner")
+    
+class Blog(Base):
+    __tablename__ = "blogs"
+
+    id = Column(Integer, primary_key=True, index=True)
+    content = Column(Text)
+    title = Column(String, unique=True)
+    image_url = Column(String)
+    created_at = Column(
+        DateTime,
+        server_default=func.now()
+        )
+    updated_at = Column(
+        DateTime,
+        server_default=func.now(),
+        onupdate=func.now()
+        )
+
+    tags = relationship(
+        'Tag',
+        secondary='link',
+        back_populates="blogs"
+        )
+
+class Tag(Base):
+    __tablename__ = "tags"
+
+    id = Column(Integer, primary_key=True, index=True)
+    name = Column(String, unique=True)
+    blogs=relationship(
+        'Blog',
+        secondary='link',
+        back_populates="tags"
+        )
+
+class Link(Base):
+    __tablename__ = "link"
+    blog_id = Column(
+        Integer, 
+        ForeignKey('blogs.id'), 
+        primary_key = True)
+    tag_id = Column(
+        Integer,
+        ForeignKey('tags.id'), 
+        primary_key = True)
 
 class Event(Base):
     __tablename__ = "events"

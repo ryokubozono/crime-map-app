@@ -8,3 +8,5 @@ Gunicorn
 uvloop
 aiofiles
 httptools
+python-multipart
+rstr

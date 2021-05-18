@@ -12,9 +12,11 @@
   },
   "dependencies": {
     "axios": "^0.21.1",
+    "buttercms": "^1.2.7",
     "core-js": "^3.6.5",
     "deepmerge": "^1.5.2",
     "leaflet.markercluster": "^1.4.1",
+    "mavon-editor": "^2.9.1",
     "moment": "github:moment/moment",
     "sass": "^1.32.8",
     "vee-validate": "^3.4.5",

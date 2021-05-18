@@ -2,6 +2,45 @@ from typing import List, Optional
 from datetime import date, datetime, time, timedelta
 from pydantic import BaseModel
 
+class BlogBase(BaseModel):
+    content: str
+    title: str
+    image_url: str
+
+class BlogCreate(BlogBase):
+    tags: List[int]
+
+class BlogUpdate(BlogBase):
+    tags: List[int]
+
+class BlogInDB(BlogBase):
+    id: int
+
+    class Config:
+        orm_mode = True
+
+class TagBase(BaseModel):
+    name: str
+
+class TagCreate(TagBase):
+    pass
+
+class TagUpdate(TagBase):
+    pass
+
+class TagInDB(TagBase):
+    id: int
+
+    class Config:
+        orm_mode = True 
+
+class Tag(TagInDB):
+    blogs: List[BlogInDB]
+
+class Blog(BlogInDB):
+    tags: List[TagInDB]
+    created_at: datetime
+    updated_at: datetime
 
 class ItemBase(BaseModel):
     title: str
