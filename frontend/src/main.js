@@ -7,6 +7,7 @@ import './plugins/vee-validate'
 import './plugins/vue-mavon-editor'
 import vuetify from './plugins/vuetify'
 import i18n from './i18n'
+import store from '@/store'
 
 import 'leaflet/dist/leaflet.css';
 
@@ -50,6 +51,7 @@ Vue.prototype.$config = {
 
 new Vue({
   router,
+  store,
   vuetify,
   i18n,
   render: h => h(App)

@@ -11,3 +11,5 @@ venv/
 .env.local
 .env.*.local
 uploads
+blog-betme-firebase-adminsdk-9i78n-0e61637d30.json
+*.sh

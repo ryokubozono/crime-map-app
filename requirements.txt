@@ -10,3 +10,4 @@ aiofiles
 httptools
 python-multipart
 rstr
+firebase_admin

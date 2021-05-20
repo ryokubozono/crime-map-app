@@ -1,5 +1,7 @@
 import Vue from 'vue'
-import VueRouter from 'vue-router'
+import Router from 'vue-router'
+import Store from '@/store/index.js'
+
 import Home from '@/views/Home.vue'
 import Event from '@/views/Event.vue'
 import Crime from '@/views/Crime.vue'
@@ -16,13 +18,16 @@ import BlogNew from '@/views/BlogNew.vue'
 import BlogEdit from '@/views/BlogEdit.vue'
 import TagNew from '@/views/TagNew.vue'
 import TagEdit from '@/views/TagEdit.vue'
+import Login from '@/views/Login.vue'
+import Register from '@/views/Register.vue'
+import Forget from '@/views/Forget.vue'
 
-Vue.use(VueRouter);
+Vue.use(Router);
 
-// '#' in urlの対策
-const mode =  'history';
-
-const routes = [
+const router = new Router({
+  mode: 'history',
+  base: process.env.BASE_URL,
+  routes: [
   {
     path: '/',
     name: 'home',
@@ -71,7 +76,10 @@ const routes = [
   {
     path: '/user',
     name: 'user',
-    component: User
+    component: User,
+    meta: { 
+      login: true,
+    }
   },
   {
     path: '/dashboard',
@@ -102,7 +110,36 @@ const routes = [
     path: '/tag_edit/:tag_id',
     name: 'tag_edit',
     component: TagEdit,
+  },
+  {
+    path: '/login',
+    name: 'login',
+    component: Login,
+  },
+  {
+    path: '/register',
+    name: 'register',
+    component: Register,
+  },
+  {
+    path: '/forget',
+    name: 'forget',
+    component: Forget,
   }
 ]
+})
 
-export default new VueRouter({routes, mode})
+router.beforeEach((to, from, next) => {
+  
+  if (to.matched.some(record => record.meta.requiresAuth) && !Store.state.auth.userToken) {
+    next({ path: '/login', query: { redirect: to.fullPath } });
+  } else if (to.matched.some(record => record.meta.requiresAdmin) && Store.state.auth.superUser == false) {
+    next(false); //ルートにリダイレクト
+  } else if (to.matched.some(record => record.meta.login) && Store.state.auth.userToken) {
+    next({ path: '/user'})
+  } else {
+    next();
+  }
+});
+
+export default router

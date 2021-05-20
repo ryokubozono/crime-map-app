@@ -10,6 +10,7 @@ from .routers import places
 from .routers import blogs
 from .routers import tags
 from .routers import files
+from .routers import auth
 from starlette.middleware.cors import CORSMiddleware
 
 from . import models
@@ -27,6 +28,7 @@ app.include_router(users.router, prefix="/api/users", tags=["users"])
 app.include_router(blogs.router, prefix="/api/blogs", tags=["blogs"])
 app.include_router(tags.router, prefix="/api/tags", tags=["tags"])
 app.include_router(files.router, prefix="/api/files", tags=["files"])
+app.include_router(auth.router, prefix="/api/auth", tags=["auth"])
 
 app.add_middleware(
     CORSMiddleware,
