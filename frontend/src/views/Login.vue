@@ -74,8 +74,7 @@
 </template>
 <script>
 
-import axios from "axios";
-import Store from '@/store/index.js'
+import firebase from 'firebase'
 
 export default {
   data() {
@@ -94,53 +93,32 @@ export default {
   },
   methods: {
     doLogin() {
-      let params = new URLSearchParams();
-      params.append('username', `${this.user.userId}`);
-      params.append('password', `${this.user.password}`);
-
-      axios.post(
-        `${this.$config.fastApiUrl}/api/auth/jwt/login`, params
-        )
-        .then(response => {
-          // console.log(response.data.access_token)
+      firebase.auth().signInWithEmailAndPassword(this.user.userId, this.user.password)
+      .then(response => {
+        response.user.getIdToken(true).then(idToken => {
           this.$store.dispatch("auth", {
-            userId: this.user.userId,
-            userToken: response.data.access_token
-          })
-          this.$store.dispatch("message", {
-            content: "log in",
-            type: "success",
-            timeout: 3000
-          })
-
-          if (this.$route.query.redirect) {
-            this.$router.push(this.$route.query.redirect);  
-          } else {
-            this.$router.push('/user')
-          }
-        })
-        .catch(error => {
-          console.log(error)
-          this.$store.dispatch("message", {
-            content: error,
-            type: "error",
-            timeout: 3000
+            user: response.user,
+            token: idToken
           })
         })
-        .then(() => {
-          axios.get(
-            `${this.$config.fastApiUrl}/api/users/me`, {
-              headers: {
-                "Authorization": `Bearer ${Store.state.auth.userToken}`
-              }
-            })
-            .then(response => {
-              console.log(response.data.is_superuser)
-            this.$store.dispatch("admin", {
-              superUser: response.data.is_superuser,
-            });
-          })
+        console.log(this.$store.state.auth)
+        let user = firebase.auth().currentUser
+        console.log(user)
+        user.getIdTokenResult(true).then(token => {
+          console.log(token)
         })
+      })
+      .catch(error => {
+        console.log(error)
+        this.$store.dispatch("message", {
+          content: error,
+          type: "error",
+          timeout: 3000
+        })
+      })
+      .then(() => {
+        this.$router.push({name: 'user'})
+      })
     }
   },
   mounted() {

@@ -1,25 +1,18 @@
 export default {
     state: {
-      userId: "",
-      userToken: "",
-      superUser: false
+      user: "",
+      token: "",
     },
     mutations: {
-        updateUser(state, user) {
-            state.userId = user.userId;
-            state.userToken = user.userToken;
+        updateUser(state, data) {
+            state.user = data.user;
+            state.token = data.token
         },
-        updateAdmin(state, admin) {
-            state.superUser = admin.superUser;
-        }
     },
     actions: {
         auth(context, user) {
             context.commit('updateUser', user);
         },
-        admin(context, admin) {
-            context.commit('updateAdmin', admin);
-        }
     },
     modules: {},
     }

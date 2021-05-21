@@ -8,7 +8,7 @@ import './plugins/vue-mavon-editor'
 import vuetify from './plugins/vuetify'
 import i18n from './i18n'
 import store from '@/store'
-
+import firebase from 'firebase'
 import 'leaflet/dist/leaflet.css';
 
 Vue.config.productionTip = false
@@ -48,6 +48,17 @@ Vue.prototype.$config = {
     navigation: false,
   }
 }
+
+var firebaseConfig = {
+  apiKey: "AIzaSyDgjOpcwwsVC9tV7MdAX7HtIVPBvPSFIL4",
+  authDomain: "blog-betme.firebaseapp.com",
+  projectId: "blog-betme",
+  storageBucket: "blog-betme.appspot.com",
+  messagingSenderId: "1070379729965",
+  appId: "1:1070379729965:web:295e39e1321bed09d4a4a4",
+  measurementId: "G-4QP6KYRVQ7"
+};
+firebase.initializeApp(firebaseConfig);
 
 new Vue({
   router,

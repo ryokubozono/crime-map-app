@@ -78,7 +78,7 @@ const router = new Router({
     name: 'user',
     component: User,
     meta: { 
-      login: true,
+      requiresAuth: true,
     }
   },
   {
@@ -131,7 +131,7 @@ const router = new Router({
 
 router.beforeEach((to, from, next) => {
   
-  if (to.matched.some(record => record.meta.requiresAuth) && !Store.state.auth.userToken) {
+  if (to.matched.some(record => record.meta.requiresAuth) && !Store.state.auth.user) {
     next({ path: '/login', query: { redirect: to.fullPath } });
   } else if (to.matched.some(record => record.meta.requiresAdmin) && Store.state.auth.superUser == false) {
     next(false); //ルートにリダイレクト
