@@ -20,6 +20,7 @@ class Blog(Base):
     content = Column(Text)
     title = Column(String, unique=True)
     image_url = Column(String)
+    is_visible = Column(Boolean)
     created_at = Column(
         DateTime,
         server_default=func.now()
@@ -41,6 +42,8 @@ class Tag(Base):
 
     id = Column(Integer, primary_key=True, index=True)
     name = Column(String, unique=True)
+    is_visible = Column(Boolean)
+    
     blogs=relationship(
         'Blog',
         secondary='link',

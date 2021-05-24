@@ -1,12 +1,20 @@
 <template>
-  <div class="user">
-    <h1>This is an user page</h1>
-    <v-btn
-        v-on:click="doLogout"
-    >
-      logout
-    </v-btn>
-  </div>
+  <v-container>
+    <v-row>
+      <v-col>    
+        Google Accout: {{$store.state.auth.user.email}}
+      </v-col>    
+    </v-row> 
+    <v-row>
+      <v-col>    
+        <v-btn
+          v-on:click="doLogout"
+        >
+          logout
+        </v-btn>
+      </v-col>    
+    </v-row>
+  </v-container>
 </template>
 
 <script>

@@ -1,12 +1,10 @@
 <template>
-  <v-app>
-    <v-main>
-      <router-view/>
-    </v-main>
-  </v-app>
+  <router-view/>
 </template>
 
 <script>
+
+import 'mavon-editor/dist/css/index.css';
 
 export default {
   name: 'App',
@@ -16,3 +14,13 @@ export default {
   }),
 };
 </script>
+
+<style>
+.mavon-editor{
+  z-index: 1;
+}
+.add-mavon-editor{
+  border: solid 0px;
+}
+
+</style>

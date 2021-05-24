@@ -7,6 +7,7 @@ from ..database import SessionLocal, engine
 import shutil
 import os
 import rstr
+from ..auth import get_user
 
 router = APIRouter()
 
@@ -23,7 +24,7 @@ async def create_file(file: bytes = File(...)):
     return {"file_size": len(file)}
 
 @router.post("/uploadfile/")
-async def create_upload_file(image: UploadFile = File(...)):
+async def create_upload_file(image: UploadFile = File(...), user = Depends(get_user)):
     dir, ext = os.path.splitext(image.filename)
     new_filename = rstr.xeger(r'^[0-9]{2}[0-9a-zA-Z0-9]{10}') + ext
     upload_path = f"uploads/{new_filename}"

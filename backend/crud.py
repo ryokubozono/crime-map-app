@@ -158,12 +158,19 @@ def create_user_item(db: Session, item: schemas.ItemCreate, user_id: int):
     db.refresh(db_item)
     return db_item
 
+def get_blogs_all(db: Session):
+    return db.query(models.Blog).all()   
+
+def get_blogs_visible(db: Session):
+    return db.query(models.Blog).filter(models.Blog.is_visible == 1).all()   
+
 def create_blog(db: Session, blog: schemas.BlogCreate):
     db_blog = models.Blog(
         title=blog.title,
         content=blog.content,
         tags=get_tags_by_ids(db=db, tag_ids=blog.tags),
-        image_url=blog.image_url
+        image_url=blog.image_url,
+        is_visible=blog.is_visible
     )
     db.add(db_blog)
     db.commit()
@@ -171,12 +178,15 @@ def create_blog(db: Session, blog: schemas.BlogCreate):
     return db_blog
 
 def get_blog_by_id(db: Session, blog_id: int):
-    return db.query(models.Blog).filter(models.Blog.id == blog_id).first()
+    return db.query(models.Blog).\
+        filter(models.Blog.id == blog_id).\
+        first()
 
 def update_blog(db: Session, blog_id: int, blog: schemas.BlogUpdate):
     db_blog = get_blog_by_id(db=db, blog_id=blog_id)
     db_blog.content = blog.content
     db_blog.title = blog.title
+    db_blog.is_visible = blog.is_visible
     db_blog.tags = get_tags_by_ids(db=db, tag_ids=blog.tags)
     db_blog.image_url = blog.image_url
     db.commit()
@@ -190,7 +200,10 @@ def create_tag(db: Session, tag: schemas.TagCreate):
     db.refresh(db_tag)
     return db_tag
 
-def get_tags(db: Session):
+def get_tags_visible(db: Session):
+    return db.query(models.Tag).filter(models.Tag.is_visible == 1).all()
+
+def get_tags_all(db: Session):
     return db.query(models.Tag).all()
 
 def get_tag_by_id(db: Session, tag_id: int):
@@ -199,6 +212,7 @@ def get_tag_by_id(db: Session, tag_id: int):
 def update_tag(db: Session, tag_id: int, tag: schemas.TagUpdate):
     db_tag = get_tag_by_id(db=db, tag_id=tag_id)
     db_tag.name = tag.name
+    db_tag.is_visible = tag.is_visible
     db.commit()
 
     return db_tag

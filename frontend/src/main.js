@@ -15,6 +15,9 @@ Vue.config.productionTip = false
 Vue.prototype.$config = {
   fastApiUrl: process.env.VUE_APP_FAST_API_URL,
   node_env: process.env.NODE_ENV,
+  markdownPreviewOption: {
+    navigation: true,
+  },
   markdownOption: {
     bold: true,
     italic: true,
@@ -46,7 +49,21 @@ Vue.prototype.$config = {
     trash: false,
     save: false,
     navigation: false,
-  }
+  },
+  externalLink: {
+    // markdown_css: function() {
+    //   return '/static/css/markdown/github-markdown.min.css'
+    // },
+    hljs_js: function() {
+      return '/static/js/highlightjs/highlight.min.js'
+    },
+    // katex_css: function() {
+    //   return '/static/css/katex/katex.min.css'
+    // },
+    katex_js: function() {
+      return '/static/js/katex/katex.min.js'
+    },
+  },
 }
 
 var firebaseConfig = {

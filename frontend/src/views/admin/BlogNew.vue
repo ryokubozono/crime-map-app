@@ -19,6 +19,8 @@
         >
           <v-btn
             v-on:click="upload_image()"
+            color="success"
+            :disabled="!image"
           >
             upload
           </v-btn>     
@@ -39,7 +41,9 @@
       </v-col>
     </v-row>
     
-    <v-form>
+    <v-form
+      v-model="valid"
+    >
       <v-row>
         <v-col
           cols="12"
@@ -49,19 +53,25 @@
             label="Title"
             placeholder="Title"
             v-model="blog.title"
+            :rules="titleRules"
+            required
             outlined
           ></v-text-field>
         </v-col>
       </v-row>
-
-      <mavon-editor 
-        :toolbars="$config.markdownOption" 
-        v-model="blog.content" 
-        language="en" 
-        ref="md"
-        @imgAdd="imgAdd"
-      />
-
+      <v-row>
+        <v-col
+          class="mavon-editor"
+        >
+          <mavon-editor 
+            :toolbars="$config.markdownOption" 
+            v-model="blog.content" 
+            language="en" 
+            ref="md"
+            @imgAdd="imgAdd"
+          />
+        </v-col>
+      </v-row>
       <v-row>
         <v-col
           cols="12"
@@ -80,9 +90,19 @@
           ></v-select>
         </v-col>
       </v-row>
+      <v-row>
+        <v-col>
+          <v-switch
+            v-model="blog.is_visible"
+            :label="`is_visible: ${blog.is_visible.toString()}`"
+          ></v-switch>
+        </v-col>
+      </v-row>
     </v-form>
     <v-btn
       v-on:click="create_blog()"
+      :disabled="!valid || !blog.content"
+      color="success"
     >
       create
     </v-btn>
@@ -98,14 +118,19 @@ export default {
   name: "BlogNew",
   data() {
     return {
+      titleRules: [
+        v => !!v || 'Password is required',
+      ],
       blog: {
         content: "#### how to use mavonEditor in nuxt.js",
         title: "",
         tags: [],
         image_url: "",
+        is_visible: false,
       },
       tags: [],
       image: null,
+      valid: true,
     }
   },
   methods: {
@@ -117,6 +142,7 @@ export default {
         {
           headers: { 
             'Content-Type': 'multipart/form-data',
+            "Authorization": `Bearer ${this.$store.state.auth.token}`
           },
         }
         ).then(url => {
@@ -132,6 +158,7 @@ export default {
         {
           headers: { 
             'Content-Type': 'multipart/form-data',
+            "Authorization": `Bearer ${this.$store.state.auth.token}`
           },
         }
         ).then(url => {
@@ -140,7 +167,7 @@ export default {
         })
     },
     async get_tags() {
-      await axios.get(`${process.env.VUE_APP_FAST_API_URL}/api/tags/`)
+      await axios.get(`${process.env.VUE_APP_FAST_API_URL}/api/tags/visible/`)
       .then(res => res.data.forEach(row => {
         this.tags.push({
           id: row.id,
@@ -149,14 +176,33 @@ export default {
       }))
     },
     async create_blog() {
-      await axios.post(`${process.env.VUE_APP_FAST_API_URL}/api/blogs/`, {
+      await axios.post(`${process.env.VUE_APP_FAST_API_URL}/api/blogs/create_blog/`, {
         content: this.blog.content,
         title: this.blog.title,
         tags: this.blog.tags,
         image_url: this.blog.image_url,
+        is_visible: this.blog.is_visible,
+      },
+      {
+        headers: {
+          "Authorization": `Bearer ${this.$store.state.auth.token}`,
+        }
       })
       .then(res => {
-        this.$router.push({name: 'blog_edit', params: { blog_id: `${res.data.id}` }})
+        this.$store.dispatch("message", {
+          content: "updated",
+          type: "success",
+          timeout: 3000
+        })
+        this.$router.push({name: 'blog_show', params: { blog_id: res.data.id }})
+      })
+      .catch(error => {
+        console.log(error)
+        this.$store.dispatch("message", {
+          content: error,
+          type: "error",
+          timeout: 3000
+        })
       })
     }
   },

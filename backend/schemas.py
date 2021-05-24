@@ -6,6 +6,7 @@ class BlogBase(BaseModel):
     content: str
     title: str
     image_url: str
+    is_visible: bool
 
 class BlogCreate(BlogBase):
     tags: List[int]
@@ -21,6 +22,7 @@ class BlogInDB(BlogBase):
 
 class TagBase(BaseModel):
     name: str
+    is_visible: bool
 
 class TagCreate(TagBase):
     pass
