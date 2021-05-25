@@ -1,4 +1,3 @@
-
 <template>
   <v-navigation-drawer
     app
@@ -10,7 +9,6 @@
       dense
     >
       <v-list-item-group
-        v-model="group"
         active-class="deep-purple--text text--accent-4"
       >
         <v-list color="transparent">
@@ -19,18 +17,12 @@
             :key="item.to"
             :href="item.to"
           >
-
             <v-list-item-content>
-
               <v-list-item-title>
-                
                 {{item.label}}
               </v-list-item-title>
-
             </v-list-item-content>
-
           </v-list-item>
-
         </v-list>
       </v-list-item-group>
     </v-list>
@@ -66,9 +58,10 @@ export default {
           this.blog.tags.push(row)
         })
         let lines = res.data.content.split(/\r?\n/);
-        console.log(lines)
+
         lines.forEach(line => {
-          if (line.slice( 0, 1 ) == '#') {
+          if (line.slice( 0, 1 ) == '#' && line.slice(-2) == 'a>') {
+            
             this.items.push({
               label: line.match(/\[(.+)\]/)[1],
               to: line.match(/\((.+)\)/)[1],
@@ -76,10 +69,11 @@ export default {
           }
         })
       })
-    }
+    },
   },
   mounted() {
     this.get_blog()
   },
+  
 }
 </script>

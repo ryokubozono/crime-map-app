@@ -72,6 +72,7 @@
           @imgAdd="imgAdd"
           :navigation="true"
           :toolbarsFlag="true"
+          :imageClick="dummy"
         />
       </v-col>
     </v-row>
@@ -237,7 +238,10 @@ export default {
           timeout: 3000
         })
       })
-    }
+    },
+    dummy() {
+      console.log('pass')
+    },
   },
   mounted() {
     this.get_blog()

@@ -213,7 +213,6 @@ router.beforeEach((to, from, next) => {
       .then(querySnapshot => {
         const users = querySnapshot.docs.map(doc => doc.data())
         let auth = false;
-        console.log(users);
         users.forEach(user => {
           if (user.email === Store.state.auth.user.email) {
             auth = true;

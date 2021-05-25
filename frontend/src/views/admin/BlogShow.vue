@@ -56,7 +56,7 @@
           :toolbarsFlag="false"
           defaultOpen="preview"
           previewBackground="#fff"
-          :imageClick="false"
+          :imageClick="dummy"
         />
       </v-col>
     </v-row>
@@ -71,6 +71,7 @@ export default {
   name: "BlogShow",
   data() {
     return {
+      items: [],
       blog_id: '',
       blog: {
         content: "",
@@ -102,6 +103,9 @@ export default {
           timeout: 3000
         })
       })
+    },
+    dummy() {
+      console.log('pass')
     },
   },
   computed: {

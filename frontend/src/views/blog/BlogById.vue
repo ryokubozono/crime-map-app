@@ -13,7 +13,7 @@
           :boxShadow="false"
           defaultOpen="preview"
           previewBackground="#fff"
-          :imageClick="false"
+          :imageClick="dummy"
         />
       </v-col>
     </v-row>
@@ -61,6 +61,9 @@ export default {
           timeout: 3000
         })
       })
+    },
+    dummy() {
+      console.log('pass')
     },
   },
   computed: {

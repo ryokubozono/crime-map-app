@@ -6,6 +6,7 @@ import createPersistedState from 'vuex-persistedstate'
 import auth from '@/store/modules/auth'
 import core from '@/store/modules/core'
 import message from '@/store/modules/message'
+import blog from '@/store/modules/blog'
 import * as Cookies from 'js-cookie'
 
 Vue.use(Vuex)
@@ -26,7 +27,8 @@ export default new Vuex.Store({
   modules: {
     auth,
     core,
-    message
+    message,
+    blog,
   },
   plugins: [createPersistedState(options)]
 })
