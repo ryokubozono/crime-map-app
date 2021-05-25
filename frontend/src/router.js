@@ -41,7 +41,22 @@ const router = new Router({
     ]
   },
   {
-    path: '/admin',
+    path:'/admin/blog_show/',
+    component: () => import('@/views/layouts/AdminShowIndex'),
+    children: [
+
+      {
+        path: '/admin/blog_show/:blog_id',
+        name: 'blog_show',
+        component: () => import('@/views/admin/BlogShow'),
+        meta: { 
+          requiresAuth: true,
+        }
+      },
+    ]
+  },
+  {
+    path: '/admin/',
     component: () => import('@/views/layouts/AdminIndex'),
     children: [
       {
@@ -72,14 +87,6 @@ const router = new Router({
         path: '/admin/blog_all',
         name: 'blog_all',
         component: () => import('@/views/admin/BlogAll'),
-        meta: { 
-          requiresAuth: true,
-        }
-      },
-      {
-        path: '/admin/blog_show/:blog_id',
-        name: 'blog_show',
-        component: () => import('@/views/admin/BlogShow'),
         meta: { 
           requiresAuth: true,
         }

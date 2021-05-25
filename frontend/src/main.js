@@ -16,7 +16,7 @@ Vue.prototype.$config = {
   fastApiUrl: process.env.VUE_APP_FAST_API_URL,
   node_env: process.env.NODE_ENV,
   markdownPreviewOption: {
-    navigation: true,
+    navigation: false,
   },
   markdownOption: {
     bold: true,
@@ -48,7 +48,7 @@ Vue.prototype.$config = {
     htmlcode: false,
     trash: false,
     save: false,
-    navigation: false,
+    navigation: true,
   },
   externalLink: {
     // markdown_css: function() {

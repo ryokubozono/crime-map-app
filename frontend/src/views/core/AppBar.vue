@@ -4,6 +4,7 @@
     flat
     color="red"
     clipped-left
+    clipped-right
   >
 
     <v-toolbar-title

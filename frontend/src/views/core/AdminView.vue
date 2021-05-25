@@ -1,24 +1,17 @@
 
 <template>
   <v-main>
-
     <v-container
       class="pa-10"
       id="message"
     >
       <core-message />
     </v-container>
-<v-container fluid>
-
-            <router-view />
-            </v-container>
-          <core-footer />
-
-
-
-
+    <v-container >
+      <router-view />
+    </v-container>
+    <core-footer />
   </v-main>
-
 </template>
 
 <script>

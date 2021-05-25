@@ -48,18 +48,15 @@
       >
         <mavon-editor 
           class="add-mavon-editor"
-          :toolbars="$config.markdownPreviewOption"
           v-model="blog.content" 
           language="en" 
           :subfield="false"
           :editable="false"
           :boxShadow="false"
+          :toolbarsFlag="false"
           defaultOpen="preview"
           previewBackground="#fff"
-          :navigation="true"
-          :autofocus="true"
           :imageClick="false"
-          :ishljs="true"
         />
       </v-col>
     </v-row>
@@ -69,7 +66,6 @@
 <script>
 
 import axios from "axios";
-import marked from 'marked'
 
 export default {
   name: "BlogShow",
@@ -109,12 +105,10 @@ export default {
     },
   },
   computed: {
-    compiledMarkdownText: function () {
-      return marked(this.blog.content)    // computedにする必要あるかどうかは知らん
-    }
+
   },
   mounted() {
     this.get_blog()
-  }
+  },
 };
 </script>

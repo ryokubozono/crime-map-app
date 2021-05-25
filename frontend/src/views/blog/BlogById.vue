@@ -13,6 +13,7 @@
           :boxShadow="false"
           defaultOpen="preview"
           previewBackground="#fff"
+          :imageClick="false"
         />
       </v-col>
     </v-row>
