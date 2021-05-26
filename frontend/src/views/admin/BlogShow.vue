@@ -23,9 +23,7 @@
     <v-row
       justify="start"  
     >
-      <v-col
-
-      >
+      <v-col>
         <v-chip
           v-for="item in blog.tags"
           :key="item.name"  

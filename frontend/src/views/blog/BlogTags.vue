@@ -1,9 +1,18 @@
 <template>
   <div>
-
+    <v-chip
+        label
+        text-color="black"
+        class="ma-2"
+    >
+        <v-icon left>
+        mdi-label
+        </v-icon>
+        {{ tag.name }}
+    </v-chip>
     <v-row>
       <v-col
-          v-for="blog in blogs"
+          v-for="blog in tag.blogs"
           sm="6"
           md="4"
           v-bind:key="blog.title"
@@ -11,7 +20,7 @@
 
         <v-card
           class="mx-auto"
-          max-width="344"
+          max-width="344" 
           v-on:click="$router.push({name: 'blog_by_id', params: {blog_id: blog.id}})"
         >
           <v-img
@@ -22,21 +31,7 @@
           <v-card-title>
             {{blog.title}}
           </v-card-title>
-          <v-card-actions>
-            <v-chip
-              v-for="item in blog.tags"
-              :key="item.name"  
-              label
-              text-color="black"
-              class="ma-2"
-              v-on:click="$router.push({name: 'blogs_tag', params: {tag_id: item.id}})"
-            >
-              <v-icon left>
-                mdi-label
-              </v-icon>
-              {{ item.name }}
-            </v-chip>
-          </v-card-actions>
+
         </v-card>
 
       </v-col>
@@ -52,17 +47,16 @@ export default {
   name: "BlogVisible",
   data() {
     return {
-      blogs: [],
+      tag: {},
+      tag_id: '',
     }
   },
   methods: {
-    async get_blog_all() {
-      await axios.get(`${process.env.VUE_APP_FAST_API_URL}/api/blogs/visible/`
-      )
+    async get_tag() {
+      this.tag_id = this.$route.params['tag_id']
+      await axios.get(`${process.env.VUE_APP_FAST_API_URL}/api/tags/get_tag/${this.tag_id}/`)
       .then(res => {
-        res.data.forEach(blog => {
-          this.blogs.push(blog)
-        })
+        this.tag = res.data
       })
       .catch(error => {
         console.log(error)
@@ -77,7 +71,7 @@ export default {
   computed: {
   },
   mounted() {
-    this.get_blog_all()
+    this.get_tag()
   }
 };
 </script>

@@ -1,5 +1,26 @@
 <template>
   <v-container>
+
+    <v-row
+      justify="start"  
+    >
+      <v-col>
+        <v-chip
+          v-for="item in blog.tags"
+          :key="item.name"  
+          label
+          text-color="black"
+          class="ma-2"
+          v-on:click="$router.push({name: 'blogs_tag', params: {tag_id: item.id}})"
+        >
+          <v-icon left>
+            mdi-label
+          </v-icon>
+          {{ item.name }}
+        </v-chip>
+      </v-col>
+    </v-row> 
+
     <v-row>
       <v-col
         class="mavon-editor"
@@ -30,10 +51,6 @@ export default {
     return {
       blog_id: '',
       blog: {
-        content: "",
-        title: "",
-        tags: [],
-        image_url: "",
       },
     }
   },
@@ -46,12 +63,7 @@ export default {
         if (res.data == null || res.data.is_visible == false) {
           this.$router.push({name: 'not_found'})
         }
-        this.blog.title = res.data.title,
-        this.blog.content = res.data.content,
-        this.blog.image_url = res.data.image_url,
-        res.data.tags.forEach(row => {
-          this.blog.tags.push(row.id)
-        })
+        this.blog = res.data
       })
       .catch(error => {
         console.log(error)

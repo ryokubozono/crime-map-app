@@ -6,34 +6,10 @@
     >
       <core-message />
     </v-container>
-    
-    <v-container
-      class="pa-8"
-    >
-      <v-row>
-
-        <v-col
-          cols="10"
-        >
-          <router-view />
-        </v-col>
-        <v-col
-          cols="2"
-        >
-
-        </v-col>
-      </v-row>
-
-      <v-row>
-        <v-col
-          cols="12"
-        >
-          <core-footer />
-        </v-col>
-      </v-row>
-
+    <v-container>
+      <router-view />
+      <core-footer />
     </v-container>
-
   </v-main>
 </template>
 

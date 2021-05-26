@@ -25,16 +25,32 @@ const router = new Router({
   base: process.env.BASE_URL,
   routes: [
   {
-    path: '/blog',
+    path: '/blog/visible/',
     component: () => import('@/views/layouts/BlogIndex'),
     children: [
       {
-        path: '/blog/',
+        path: '/blog/visible/',
         name: 'blog_visible',
         component: () => import('@/views/blog/BlogVisible')
       },
       {
-        path: '/blog/:blog_id',
+        path: '/blog/tags_visible/',
+        name: 'tag_visible',
+        component: () => import('@/views/blog/TagVisible')
+      },
+      {
+        path: '/blog/tag/:tag_id',
+        name: 'blogs_tag',
+        component: () => import('@/views/blog/BlogTags')
+      }
+    ]
+  },
+  {
+    path: '/blog/show/',
+    component: () => import('@/views/layouts/BlogShowIndex'),
+    children: [
+      {
+        path: '/blog/show/:blog_id',
         name: 'blog_by_id',
         component: () => import('@/views/blog/BlogById'),
       },
