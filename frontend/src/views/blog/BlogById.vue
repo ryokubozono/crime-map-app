@@ -1,8 +1,7 @@
 <template>
   <v-container>
-
     <v-row
-      justify="start"  
+      justify="start" 
     >
       <v-col>
         <v-chip
@@ -20,7 +19,16 @@
         </v-chip>
       </v-col>
     </v-row> 
-
+    <v-row>
+      <v-col>
+        <v-card
+          v-if="$vuetify.breakpoint.sm || $vuetify.breakpoint.xs"
+          outlined
+        >
+          <blog-index-list />
+        </v-card>
+      </v-col> 
+    </v-row>
     <v-row>
       <v-col
         class="mavon-editor"
@@ -44,8 +52,10 @@
 <script>
 
 import axios from "axios";
+import BlogIndexList from '@/views/core/BlogIndexList.vue';
 
 export default {
+  components: { BlogIndexList },
   name: "BlogById",
   data() {
     return {

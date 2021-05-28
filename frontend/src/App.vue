@@ -22,5 +22,13 @@ export default {
 .add-mavon-editor{
   border: solid 0px;
 }
-
+:target:before {
+    content: "";
+    display: block;
+    height: 100px;
+    margin: -100px 0 0;
+}
+html {
+    scroll-behavior: smooth;
+}
 </style>

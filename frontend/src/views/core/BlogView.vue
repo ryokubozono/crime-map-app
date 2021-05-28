@@ -1,4 +1,5 @@
 <template>
+<div>
   <v-main>
     <v-container
       class="pa-10"
@@ -6,11 +7,12 @@
     >
       <core-message />
     </v-container>
-    <v-container>
+
       <router-view />
-      <core-footer />
-    </v-container>
+
   </v-main>
+  <core-footer />
+</div>
 </template>
 
 <script>

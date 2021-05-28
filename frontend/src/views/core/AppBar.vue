@@ -1,10 +1,10 @@
 <template>
   <v-app-bar
     app
-    flat
     color="red"
     clipped-left
     clipped-right
+    :absolute="$vuetify.breakpoint.sm || $vuetify.breakpoint.xs"
   >
 
     <v-toolbar-title
