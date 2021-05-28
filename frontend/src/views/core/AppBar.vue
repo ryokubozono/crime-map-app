@@ -22,6 +22,13 @@
     </v-btn>
     <v-btn
       text
+      v-on:click="$router.push({name: 'tag_visible'})"
+    >
+      tag
+    </v-btn>
+
+    <v-btn
+      text
       v-on:click="$router.push({name: 'admin_index'})"
       v-if="$store.state.auth.token"
     >
