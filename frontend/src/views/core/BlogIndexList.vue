@@ -12,6 +12,7 @@
             v-for="item in items"
             :key="item.to"
             :href="item.to"
+            :class="`pl-${item.tab}`"
           >
             <v-list-item-content>
               <v-list-item-title>
@@ -60,6 +61,7 @@ export default {
             this.items.push({
               label: line.match(/\[(.+)\]/)[1],
               to: line.match(/\((.+)\)/)[1],
+              tab: (line.match( /#/g )).length -1,
             })
           }
         })
